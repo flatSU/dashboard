@@ -107,14 +107,18 @@
     .btn-sm { font-size: 11px; padding: 3px 8px; }
 
     /* ---- QUEUE ---- */
-    .q-item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 0; border-bottom: 0.5px solid var(--border); }
+    .q-item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 0; border-bottom: 0.5px solid var(--border); transition: opacity 0.4s ease, transform 0.4s ease; }
     .q-item:last-child { border-bottom: none; padding-bottom: 0; }
     .q-item:first-child { padding-top: 0; }
+    .q-item.confirmed { background: var(--green-bg); border-radius: var(--radius); padding-left: 8px; padding-right: 8px; }
+    .q-item.dismissing { opacity: 0; transform: translateX(10px); }
     .q-icon { width: 30px; height: 30px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; background: var(--bg-2); }
+    .q-item.confirmed .q-icon { background: var(--green-bg); }
     .q-body { flex: 1; min-width: 0; }
     .q-title { font-size: 13px; font-weight: 500; line-height: 1.4; }
     .q-sub { font-size: 12px; color: var(--text-2); margin-top: 3px; }
-    .q-actions { display: flex; gap: 5px; flex-shrink: 0; }
+    .q-actions { display: flex; gap: 5px; flex-shrink: 0; align-items: center; }
+    .q-check { font-size: 16px; color: var(--green); font-weight: 600; }
 
     /* ---- JOBS ---- */
     .job-item { padding: 9px 0; border-bottom: 0.5px solid var(--border); }
@@ -607,27 +611,40 @@ function renderQueue() {
   badge.style.display = 'inline-flex';
   const ICONS = { job:'🏥', amazon:'📦', finance:'💳', alert:'🔔' };
   el.innerHTML = S.queue.map((item, i) => `
-    <div class="q-item">
-      <div class="q-icon">${ICONS[item.type]||'📌'}</div>
+    <div class="q-item${item._confirmed?' confirmed':''}" id="qitem-${i}">
+      <div class="q-icon">${item._confirmed ? '✅' : (ICONS[item.type]||'📌')}</div>
       <div class="q-body">
         <div class="q-title">${item.title}</div>
         <div class="q-sub">${item.sub}${item.badge?` <span class="badge badge-green" style="margin-left:5px">${item.badge}</span>`:''}</div>
       </div>
       <div class="q-actions">
-        <button class="btn btn-sm" onclick="dismissQ(${i})">Dismiss</button>
-        <button class="btn btn-sm btn-blue" onclick="actQ(${i})">${item.type==='job'?'Apply':item.type==='amazon'?'View':'Done'}</button>
+        ${item._confirmed
+          ? `<span class="q-check">✓ Done</span>`
+          : `<button class="btn btn-sm" onclick="dismissQ(${i})">Dismiss</button>
+             <button class="btn btn-sm btn-blue" onclick="actQ(${i})">${item.type==='job'?'Apply':item.type==='amazon'?'View':'Done'}</button>`
+        }
       </div>
     </div>
   `).join('');
   updateGreeting();
 }
 
-function dismissQ(i) { S.queue.splice(i,1); ls('queue',JSON.stringify(S.queue)); renderQueue(); }
+function dismissQ(i) {
+  const el = document.getElementById('qitem-' + i);
+  if (el) { el.classList.add('dismissing'); setTimeout(() => { S.queue.splice(i,1); ls('queue',JSON.stringify(S.queue)); renderQueue(); }, 400); }
+  else { S.queue.splice(i,1); ls('queue',JSON.stringify(S.queue)); renderQueue(); }
+}
 function actQ(i) {
   const item = S.queue[i];
-  if (item.type === 'amazon') window.open('https://amazon.ca','_blank');
-  else if (item.type === 'job') window.open('https://ca.indeed.com/jobs?q=registered+practical+nurse&l=Toronto','_blank');
-  dismissQ(i);
+  // Open link without dismissing
+  if (item.type === 'amazon' && item.url) window.open(item.url, '_blank');
+  else if (item.type === 'amazon') window.open('https://amazon.ca', '_blank');
+  else if (item.type === 'job' && item.url) window.open(item.url, '_blank');
+  else if (item.type === 'job') window.open('https://ca.indeed.com/jobs?q=registered+practical+nurse&l=Toronto', '_blank');
+  // Mark confirmed, show checkmark, then remove after 2.5s
+  S.queue[i]._confirmed = true;
+  renderQueue();
+  setTimeout(() => dismissQ(i), 2500);
 }
 
 function renderJobs() {
