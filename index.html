@@ -454,6 +454,7 @@ function signIn() {
   const client = google.accounts.oauth2.initTokenClient({
     client_id: cid,
     scope: PROFILE.SCOPES,
+    prompt: 'consent',
     callback: (r) => {
       if (r.access_token) {
         S.token = r.access_token;
