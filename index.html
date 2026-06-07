@@ -6,329 +6,616 @@
   <title>Anthony's Dashboard</title>
   <style>
     :root {
-      --bg: #ffffff;
-      --bg-2: #f6f5f2;
-      --bg-3: #eeede9;
-      --text: #1a1a1a;
-      --text-2: #6b6b6b;
-      --text-3: #9b9b9b;
-      --border: rgba(0,0,0,0.1);
-      --border-2: rgba(0,0,0,0.18);
-      --blue: #185FA5;
-      --blue-bg: #e6f1fb;
-      --green: #2d7a2d;
-      --green-bg: #eaf3de;
-      --amber: #a06010;
-      --amber-bg: #faeeda;
-      --red: #a32d2d;
-      --red-bg: #fcebeb;
-      --radius: 8px;
-      --radius-lg: 12px;
+      --bg:      #0c0c0f;
+      --bg-2:    #141417;
+      --bg-3:    #1c1c20;
+      --bg-4:    #242428;
+      --text:    #f0f0ee;
+      --text-2:  #8a8a90;
+      --text-3:  #50505a;
+      --border:  rgba(255,255,255,0.06);
+      --border-2:rgba(255,255,255,0.12);
+      --blue:    #60a5fa;
+      --blue-bg: rgba(96,165,250,0.1);
+      --indigo:  #818cf8;
+      --green:   #34d399;
+      --green-bg:rgba(52,211,153,0.1);
+      --amber:   #fbbf24;
+      --amber-bg:rgba(251,191,36,0.1);
+      --red:     #f87171;
+      --red-bg:  rgba(248,113,113,0.1);
+      --radius:  8px;
+      --radius-lg:14px;
+      --sidebar: 220px;
       --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
     }
-    @media (prefers-color-scheme: dark) {
+    @media (prefers-color-scheme: light) {
       :root {
-        --bg: #1c1c1e;
-        --bg-2: #242426;
-        --bg-3: #2c2c2e;
-        --text: #e8e8e6;
-        --text-2: #8e8e93;
-        --text-3: #5a5a5e;
-        --border: rgba(255,255,255,0.1);
-        --border-2: rgba(255,255,255,0.2);
-        --blue: #5ba3f0;
-        --blue-bg: #0c2a45;
-        --green: #5cb85c;
-        --green-bg: #1a2e0a;
-        --amber: #e09030;
-        --amber-bg: #2e1e05;
-        --red: #e05555;
-        --red-bg: #2e0a0a;
+        --bg:      #f4f4f6;
+        --bg-2:    #ffffff;
+        --bg-3:    #ebebee;
+        --bg-4:    #e0e0e4;
+        --text:    #111113;
+        --text-2:  #666670;
+        --text-3:  #aaaaB4;
+        --border:  rgba(0,0,0,0.07);
+        --border-2:rgba(0,0,0,0.14);
+        --blue:    #2563eb;
+        --blue-bg: rgba(37,99,235,0.08);
+        --indigo:  #4f46e5;
+        --green:   #059669;
+        --green-bg:rgba(5,150,105,0.08);
+        --amber:   #d97706;
+        --amber-bg:rgba(217,119,6,0.08);
+        --red:     #dc2626;
+        --red-bg:  rgba(220,38,38,0.08);
       }
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: var(--font);
-      background: var(--bg-3);
+      background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ---- LOGIN ---- */
+    /* ===== LOGIN ===== */
     #loginScreen {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 20px;
-      padding: 32px;
-      text-align: center;
+      gap: 0;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
     }
-    .login-title { font-size: 26px; font-weight: 500; }
-    .login-sub { font-size: 14px; color: var(--text-2); max-width: 340px; line-height: 1.6; margin-top: 6px; }
-    .login-actions { display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 8px; }
+    #loginScreen::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(129,140,248,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -60%);
+      pointer-events: none;
+    }
+    .login-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border-2);
+      border-radius: 20px;
+      padding: 48px 44px;
+      width: 420px;
+      max-width: calc(100vw - 32px);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .login-avatar {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, var(--indigo), var(--blue));
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin: 0 auto 20px;
+    }
+    .login-title { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .login-sub { font-size: 13px; color: var(--text-2); line-height: 1.6; max-width: 280px; margin: 0 auto 28px; }
+    .login-btn-primary {
+      width: 100%; padding: 11px 0;
+      background: var(--indigo);
+      color: #fff;
+      border: none; border-radius: var(--radius);
+      font-size: 14px; font-weight: 500; font-family: var(--font);
+      cursor: pointer; transition: opacity 0.15s;
+      margin-bottom: 10px;
+    }
+    .login-btn-primary:hover { opacity: 0.88; }
+    .login-btn-secondary {
+      width: 100%; padding: 9px 0;
+      background: transparent;
+      color: var(--text-2);
+      border: 1px solid var(--border-2); border-radius: var(--radius);
+      font-size: 13px; font-family: var(--font);
+      cursor: pointer; transition: background 0.15s;
+    }
+    .login-btn-secondary:hover { background: var(--bg-3); }
 
-    /* ---- DASHBOARD LAYOUT ---- */
-    #dashboard { display: none; flex-direction: column; max-width: 1100px; margin: 0 auto; padding: 20px 16px 40px; gap: 14px; }
+    /* ===== LAYOUT ===== */
+    #dashboard {
+      display: none;
+      min-height: 100vh;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: var(--sidebar);
+      background: var(--bg-2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 14px;
+      gap: 4px;
+      z-index: 100;
+    }
+    .sidebar-brand {
+      display: flex; align-items: center; gap: 10px;
+      padding: 6px 8px 16px;
+      margin-bottom: 4px;
+    }
+    .sidebar-avatar {
+      width: 30px; height: 30px;
+      background: linear-gradient(135deg, var(--indigo), var(--blue));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; color: #fff; font-weight: 700; flex-shrink: 0;
+    }
+    .sidebar-name { font-size: 13px; font-weight: 600; }
+    .sidebar-role { font-size: 11px; color: var(--text-3); }
+    .sidebar-section { font-size: 10px; font-weight: 600; color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; padding: 12px 10px 4px; }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 7px 10px;
+      border-radius: var(--radius);
+      color: var(--text-2);
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s;
+      text-decoration: none;
+    }
+    .sidebar-item:hover { background: var(--bg-3); color: var(--text); }
+    .sidebar-item.active { background: var(--blue-bg); color: var(--blue); }
+    .sidebar-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
+    .sidebar-badge { margin-left: auto; font-size: 10px; font-weight: 600; background: var(--amber); color: #000; border-radius: 4px; padding: 1px 5px; min-width: 18px; text-align: center; }
+    .sidebar-footer { margin-top: auto; border-top: 1px solid var(--border); padding-top: 14px; display: flex; flex-direction: column; gap: 2px; }
 
-    /* ---- TOP BAR ---- */
-    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 2px 4px; }
-    .topbar-title { font-size: 19px; font-weight: 500; }
-    .topbar-sub { font-size: 12px; color: var(--text-2); margin-top: 3px; }
-    .topbar-right { display: flex; align-items: center; gap: 8px; }
+    .main {
+      margin-left: var(--sidebar);
+      padding: 24px 28px 48px;
+      max-width: calc(var(--sidebar) + 960px);
+    }
 
-    /* ---- CARDS ---- */
-    .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; }
-    .card-header { display: flex; align-items: center; gap: 7px; margin-bottom: 12px; }
-    .card-icon { font-size: 15px; }
-    .card-title { font-size: 13px; font-weight: 500; }
-    .card-action { margin-left: auto; font-size: 12px; color: var(--blue); text-decoration: none; cursor: pointer; }
+    /* ===== TOP BAR ===== */
+    .topbar {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .topbar-greeting { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+    .topbar-sub { font-size: 13px; color: var(--text-2); margin-top: 3px; }
+    .topbar-actions { display: flex; gap: 8px; align-items: center; }
 
-    /* ---- GRID ---- */
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    @media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
+    /* ===== STAT PILLS ===== */
+    .stat-row { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+    .stat-pill {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: 100px; padding: 6px 14px;
+      font-size: 12px; color: var(--text-2);
+    }
+    .stat-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); flex-shrink: 0; }
+    .stat-pill .dot.g { background: var(--green); }
+    .stat-pill .dot.a { background: var(--amber); }
+    .stat-pill .dot.b { background: var(--blue); }
+    .stat-val { font-weight: 600; color: var(--text); }
 
-    /* ---- BADGES ---- */
-    .badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
-    .badge-blue { background: var(--blue-bg); color: var(--blue); }
-    .badge-green { background: var(--green-bg); color: var(--green); }
-    .badge-amber { background: var(--amber-bg); color: var(--amber); }
-    .badge-red { background: var(--red-bg); color: var(--red); }
-    .badge-gray { background: var(--bg-2); color: var(--text-2); }
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+    }
+    .card-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-3);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .card-label-right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
 
-    /* ---- BUTTONS ---- */
-    .btn { font-size: 12px; font-family: var(--font); padding: 5px 12px; border: 0.5px solid var(--border-2); border-radius: var(--radius); background: transparent; color: var(--text); cursor: pointer; transition: background 0.1s; }
-    .btn:hover { background: var(--bg-2); }
-    .btn-blue { background: var(--blue-bg); border-color: var(--blue); color: var(--blue); }
+    /* ===== GRID ===== */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    @media (max-width: 800px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+    /* ===== BADGES ===== */
+    .badge {
+      display: inline-flex; align-items: center;
+      font-size: 11px; font-weight: 500;
+      padding: 2px 8px; border-radius: 100px;
+      white-space: nowrap;
+    }
+    .badge-blue   { background: var(--blue-bg);   color: var(--blue); }
+    .badge-green  { background: var(--green-bg);  color: var(--green); }
+    .badge-amber  { background: var(--amber-bg);  color: var(--amber); }
+    .badge-red    { background: var(--red-bg);    color: var(--red); }
+    .badge-gray   { background: var(--bg-4);      color: var(--text-2); }
+    .badge-indigo { background: rgba(129,140,248,0.12); color: var(--indigo); }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      font-size: 12px; font-family: var(--font);
+      padding: 6px 14px;
+      border: 1px solid var(--border-2);
+      border-radius: var(--radius);
+      background: transparent; color: var(--text-2);
+      cursor: pointer; transition: all 0.12s;
+      white-space: nowrap;
+    }
+    .btn:hover { background: var(--bg-3); color: var(--text); border-color: var(--border-2); }
+    .btn-primary {
+      background: var(--indigo); color: #fff;
+      border-color: transparent;
+    }
+    .btn-primary:hover { opacity: 0.88; background: var(--indigo); color: #fff; }
+    .btn-blue { background: var(--blue-bg); color: var(--blue); border-color: rgba(96,165,250,0.2); }
     .btn-blue:hover { opacity: 0.85; }
-    .btn-sm { font-size: 11px; padding: 3px 8px; }
+    .btn-sm { font-size: 11px; padding: 4px 10px; }
+    .btn-icon { padding: 6px 8px; font-size: 13px; }
 
-    /* ---- QUEUE ---- */
-    .q-item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 0; border-bottom: 0.5px solid var(--border); transition: opacity 0.4s ease, transform 0.4s ease; }
+    /* ===== SETUP BANNER ===== */
+    .setup-banner {
+      background: var(--amber-bg); border: 1px solid rgba(251,191,36,0.2);
+      border-radius: var(--radius-lg); padding: 12px 16px;
+      font-size: 13px; color: var(--amber);
+      display: none; align-items: center; gap: 10px;
+      margin-bottom: 20px;
+    }
+    .setup-banner a { color: var(--amber); font-weight: 500; cursor: pointer; text-decoration: underline; }
+
+    /* ===== DECISION QUEUE ===== */
+    .queue-empty { font-size: 13px; color: var(--text-3); padding: 8px 0; text-align: center; }
+    .q-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      transition: opacity 0.4s, transform 0.4s;
+    }
     .q-item:last-child { border-bottom: none; padding-bottom: 0; }
     .q-item:first-child { padding-top: 0; }
-    .q-item.confirmed { background: var(--green-bg); border-radius: var(--radius); padding-left: 8px; padding-right: 8px; }
-    .q-item.dismissing { opacity: 0; transform: translateX(10px); }
-    .q-icon { width: 30px; height: 30px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; background: var(--bg-2); }
-    .q-item.confirmed .q-icon { background: var(--green-bg); }
+    .q-item.confirmed { background: var(--green-bg); border-radius: var(--radius); padding: 12px 12px; margin: 0 -12px; border-bottom-color: transparent; }
+    .q-item.dismissing { opacity: 0; transform: translateX(12px); }
+    .q-stripe {
+      width: 3px; height: 36px; border-radius: 2px; flex-shrink: 0;
+    }
+    .q-stripe-job    { background: var(--blue); }
+    .q-stripe-amazon { background: var(--amber); }
+    .q-stripe-finance{ background: var(--red); }
+    .q-stripe-alert  { background: var(--text-3); }
+    .q-icon {
+      width: 34px; height: 34px;
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .q-icon-job    { background: var(--blue-bg); }
+    .q-icon-amazon { background: var(--amber-bg); }
+    .q-icon-finance{ background: var(--red-bg); }
+    .q-icon-alert  { background: var(--bg-4); }
     .q-body { flex: 1; min-width: 0; }
     .q-title { font-size: 13px; font-weight: 500; line-height: 1.4; }
-    .q-sub { font-size: 12px; color: var(--text-2); margin-top: 3px; }
-    .q-actions { display: flex; gap: 5px; flex-shrink: 0; align-items: center; }
-    .q-check { font-size: 16px; color: var(--green); font-weight: 600; }
+    .q-sub   { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+    .q-actions { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
+    .q-check { font-size: 13px; font-weight: 600; color: var(--green); white-space: nowrap; }
 
-    /* ---- JOBS ---- */
-    .job-item { padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+    /* ===== JOBS ===== */
+    .job-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
     .job-item:last-child { border-bottom: none; padding-bottom: 0; }
     .job-item:first-child { padding-top: 0; }
-    .job-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .job-meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-top: 4px; font-size: 12px; color: var(--text-2); }
+    .job-initials {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: var(--blue-bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: var(--blue);
+      flex-shrink: 0; letter-spacing: 0;
+    }
+    .job-body { flex: 1; min-width: 0; }
+    .job-title { font-size: 13px; font-weight: 500; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .job-meta  { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .job-filter-note { font-size: 11px; color: var(--text-3); margin-top: 10px; }
 
-    /* ---- METRICS ---- */
-    .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-    .metric { background: var(--bg-2); border-radius: var(--radius); padding: 11px 13px; }
-    .metric-label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; }
-    .metric-val { font-size: 21px; font-weight: 500; }
-    .metric-sub { font-size: 11px; color: var(--text-2); margin-top: 2px; }
-
-    /* ---- PROGRESS ---- */
-    .progress-track { height: 5px; border-radius: 3px; background: var(--bg-2); margin-top: 10px; overflow: hidden; }
-    .progress-fill { height: 100%; border-radius: 3px; background: #1D9E75; transition: width 0.4s; }
-
-    /* ---- DEBT LIST ---- */
-    .debt-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; }
+    /* ===== FINANCE ===== */
+    .finance-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .fin-metric { background: var(--bg-3); border-radius: var(--radius); padding: 12px 14px; }
+    .fin-label { font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-3); margin-bottom: 4px; }
+    .fin-val   { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+    .fin-sub   { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+    .progress-track { height: 4px; border-radius: 2px; background: var(--bg-4); margin: 14px 0 6px; overflow: hidden; }
+    .progress-fill  { height: 100%; border-radius: 2px; background: var(--green); transition: width 0.5s; }
+    .progress-label { font-size: 11px; color: var(--text-2); }
+    .debt-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+    }
     .debt-row:last-child { border-bottom: none; }
-    .debt-name-col { color: var(--text); }
-    .debt-due-col { font-size: 11px; color: var(--text-2); margin-top: 2px; }
-    .debt-right { display: flex; align-items: center; gap: 8px; }
-    .debt-amt { font-weight: 500; }
+    .debt-name { font-weight: 500; }
+    .debt-due  { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+    .debt-amt  { font-weight: 600; }
 
-    /* ---- YOUTUBE ---- */
-    .yt-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
-    .yt-item:last-child { border-bottom: none; }
-    .yt-thumb { width: 48px; height: 32px; border-radius: 4px; background: var(--bg-2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px; color: var(--text-2); }
+    /* ===== YOUTUBE ===== */
+    .yt-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+    }
+    .yt-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .yt-item:first-child { padding-top: 0; }
+    .yt-thumb {
+      width: 40px; height: 28px; border-radius: 5px;
+      background: var(--bg-4);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 12px; color: var(--text-3);
+    }
+    .yt-thumb.done { background: var(--green-bg); color: var(--green); }
+    .yt-thumb.summ { background: var(--amber-bg); color: var(--amber); }
     .yt-body { flex: 1; min-width: 0; }
-    .yt-title { font-size: 12px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .yt-meta { display: flex; align-items: center; gap: 7px; margin-top: 4px; font-size: 11px; color: var(--text-2); }
-    .url-input { width: 100%; margin-top: 10px; padding: 7px 11px; font-size: 12px; font-family: var(--font); border: 0.5px solid var(--border-2); border-radius: var(--radius); background: var(--bg-2); color: var(--text); outline: none; }
-    .url-input:focus { border-color: var(--blue); }
+    .yt-title { font-size: 12px; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .yt-meta  { display: flex; align-items: center; gap: 6px; margin-top: 3px; font-size: 11px; color: var(--text-2); }
+    .url-input {
+      width: 100%; margin-top: 12px; padding: 8px 12px;
+      font-size: 12px; font-family: var(--font);
+      border: 1px solid var(--border-2); border-radius: var(--radius);
+      background: var(--bg-3); color: var(--text); outline: none;
+      transition: border-color 0.15s;
+    }
+    .url-input:focus { border-color: var(--indigo); }
     .url-input::placeholder { color: var(--text-3); }
 
-    /* ---- SCHEDULE ---- */
-    .sched-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 2px; }
-    .sched-day { text-align: center; padding: 7px 3px; border-radius: var(--radius); }
-    .sched-day-name { font-size: 10px; color: var(--text-3); text-transform: uppercase; margin-bottom: 4px; }
-    .sched-day-val { font-size: 11px; font-weight: 500; }
-    .s-hvac { background: var(--blue-bg); }
+    /* ===== SCHEDULE ===== */
+    .sched-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+    .sched-day {
+      text-align: center; padding: 8px 3px;
+      border-radius: var(--radius); border: 1px solid transparent;
+    }
+    .sched-day-name { font-size: 9px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+    .sched-day-val  { font-size: 11px; font-weight: 600; }
+    .s-hvac  { background: var(--blue-bg); }
     .s-hvac .sched-day-val { color: var(--blue); }
-    .s-off { background: var(--bg-2); }
+    .s-hvac .sched-day-name { color: var(--blue); opacity: 0.6; }
+    .s-off   { background: var(--bg-3); }
     .s-off .sched-day-val { color: var(--green); }
     .s-train { background: var(--green-bg); }
     .s-train .sched-day-val { color: var(--green); }
-    .s-today { outline: 1.5px solid var(--blue); }
-    .hyrox-pill { display: flex; justify-content: space-between; align-items: center; background: var(--green-bg); border-radius: var(--radius); padding: 9px 13px; margin-top: 12px; }
-    .hyrox-left { font-size: 12px; font-weight: 500; color: var(--green); }
-    .hyrox-right { font-size: 12px; font-weight: 500; color: var(--green); }
+    .s-today { border-color: var(--indigo) !important; }
+    .open-note { font-size: 11px; color: var(--text-3); margin-top: 10px; }
+    .hyrox-pill {
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(96,165,250,0.06));
+      border: 1px solid rgba(52,211,153,0.15);
+      border-radius: var(--radius); padding: 10px 14px; margin-top: 12px;
+    }
+    .hyrox-left  { font-size: 12px; font-weight: 500; color: var(--green); }
+    .hyrox-right { font-size: 12px; font-weight: 600; color: var(--green); }
 
-    /* ---- ALERTS ---- */
-    .alerts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-    .alert-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+    /* ===== ALERTS ===== */
+    .alert-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+    }
     .alert-item:last-child { border-bottom: none; }
-    .alert-item:nth-child(odd) { padding-right: 14px; border-right: 0.5px solid var(--border); }
-    .alert-item:nth-child(even) { padding-left: 14px; }
-    .alert-icon { width: 28px; height: 28px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
-    .alert-title { font-size: 13px; }
-    .alert-sub { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+    .alert-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0;
+    }
+    .alert-title { font-size: 13px; font-weight: 500; }
+    .alert-sub   { font-size: 11px; color: var(--text-2); margin-top: 2px; }
 
-    /* ---- OVERLAY / MODALS ---- */
-    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; }
+    /* ===== OVERLAY / MODALS ===== */
+    .overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55); z-index: 200;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(4px);
+    }
     .overlay.open { display: flex; }
-    .panel { background: var(--bg); border-radius: var(--radius-lg); padding: 22px; width: 380px; max-width: calc(100vw - 32px); max-height: 85vh; overflow-y: auto; }
-    .panel-title { font-size: 15px; font-weight: 500; margin-bottom: 16px; }
-    .field { margin-bottom: 12px; }
-    .field label { display: block; font-size: 12px; color: var(--text-2); margin-bottom: 4px; }
-    .field input, .field select { width: 100%; padding: 7px 11px; font-size: 13px; font-family: var(--font); border: 0.5px solid var(--border-2); border-radius: var(--radius); background: var(--bg-2); color: var(--text); outline: none; }
-    .field input:focus { border-color: var(--blue); }
-    .panel-actions { display: flex; gap: 8px; margin-top: 14px; }
+    .panel {
+      background: var(--bg-2); border: 1px solid var(--border-2);
+      border-radius: var(--radius-lg); padding: 24px;
+      width: 380px; max-width: calc(100vw - 32px);
+      max-height: 88vh; overflow-y: auto;
+    }
+    .panel-title { font-size: 15px; font-weight: 600; margin-bottom: 18px; letter-spacing: -0.01em; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+    .field input, .field select {
+      width: 100%; padding: 8px 12px;
+      font-size: 13px; font-family: var(--font);
+      border: 1px solid var(--border-2); border-radius: var(--radius);
+      background: var(--bg-3); color: var(--text); outline: none;
+      transition: border-color 0.15s;
+    }
+    .field input:focus { border-color: var(--indigo); }
+    .panel-actions { display: flex; gap: 8px; margin-top: 18px; }
 
-    /* ---- EMPTY STATE ---- */
-    .empty { font-size: 12px; color: var(--text-3); padding: 10px 0; text-align: center; }
+    /* ===== EMPTY STATE ===== */
+    .empty { font-size: 12px; color: var(--text-3); padding: 12px 0; text-align: center; }
 
-    /* ---- CONN STATUS ---- */
-    .conn-status { font-size: 11px; color: var(--text-3); margin-top: 9px; display: flex; align-items: center; gap: 5px; }
-    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); display: inline-block; }
-    .dot-green { background: #1D9E75; }
+    /* ===== CONN STATUS ===== */
+    .conn-note { font-size: 11px; color: var(--text-3); margin-top: 10px; display: flex; align-items: center; gap: 5px; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); display: inline-block; flex-shrink: 0; }
+    .dot-green { background: var(--green); }
 
-    /* ---- SETUP BANNER ---- */
-    .setup-banner { background: var(--amber-bg); border: 0.5px solid var(--amber); border-radius: var(--radius-lg); padding: 12px 16px; font-size: 13px; color: var(--amber); display: none; align-items: center; gap: 10px; }
-    .setup-banner a { color: var(--amber); font-weight: 500; cursor: pointer; text-decoration: underline; }
+    /* ===== SECTION SPACING ===== */
+    .section { margin-bottom: 16px; }
   </style>
 </head>
 <body>
 
 <!-- LOGIN SCREEN -->
 <div id="loginScreen">
-  <div>
+  <div class="login-card">
+    <div class="login-avatar">⚡</div>
     <div class="login-title">Anthony's Dashboard</div>
-    <p class="login-sub">Your personal automation hub. Sign in with Google to load your jobs, schedule, and alerts.</p>
-  </div>
-  <div class="login-actions">
-    <button class="btn btn-blue" style="font-size:14px;padding:10px 28px" onclick="signIn()">Connect Google Account</button>
-    <button class="btn" style="font-size:12px;color:var(--text-2)" onclick="loadDemo()">Preview with demo data →</button>
+    <p class="login-sub">Your personal command center. Connect Google to load real job alerts, your calendar, and finance tracker.</p>
+    <button class="login-btn-primary" onclick="signIn()">Connect Google Account</button>
+    <button class="login-btn-secondary" onclick="loadDemo()">Preview with demo data →</button>
   </div>
 </div>
 
 <!-- MAIN DASHBOARD -->
 <div id="dashboard">
 
-  <!-- Setup banner -->
-  <div class="setup-banner" id="setupBanner">
-    ⚙ Google Client ID not set. <a onclick="openSettings()">Open Settings</a> to connect your Google account — see SETUP.md for instructions.
-  </div>
-
-  <!-- Top bar -->
-  <div class="topbar">
-    <div>
-      <div class="topbar-title" id="greeting">Good morning, Anthony</div>
-      <div class="topbar-sub" id="dateSubline"></div>
-    </div>
-    <div class="topbar-right">
-      <span class="badge badge-amber" id="pendingBadge" style="display:none"></span>
-      <button class="btn" onclick="refreshAll()">↻ Refresh</button>
-      <button class="btn" onclick="openSettings()">⚙ Settings</button>
-    </div>
-  </div>
-
-  <!-- Decision Queue -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-icon">📥</span>
-      <span class="card-title">Decision queue</span>
-      <span class="badge badge-amber" id="queueBadge" style="margin-left:auto;display:none"></span>
-    </div>
-    <div id="queueList"></div>
-  </div>
-
-  <!-- Jobs + Finance -->
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-header">
-        <span class="card-icon">🏥</span>
-        <span class="card-title">RPN job matches</span>
-        <span class="badge badge-green" id="jobBadge" style="margin-left:auto;display:none"></span>
-        <a class="card-action" href="https://ca.indeed.com/jobs?q=registered+practical+nurse&l=Toronto%2C+ON&fromage=3" target="_blank" style="margin-left:8px">Indeed →</a>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-avatar">A</div>
+      <div>
+        <div class="sidebar-name">Anthony</div>
+        <div class="sidebar-role">HVAC · RPN · Gig</div>
       </div>
-      <div id="jobList"><div class="empty">Connecting to Gmail...</div></div>
-      <div class="conn-status"><span class="dot" id="jobDot"></span><span id="jobStatus">Filters: clinic · aesthetic · occ health · no LTC</span></div>
     </div>
 
-    <div class="card">
-      <div class="card-header">
-        <span class="card-icon">💳</span>
-        <span class="card-title">Finance</span>
-        <button class="btn btn-sm" onclick="openFinance()" style="margin-left:auto">+ Add</button>
+    <div class="sidebar-section">Work</div>
+    <div class="sidebar-item active">
+      <span class="sidebar-icon">📥</span> Decisions
+      <span class="sidebar-badge" id="sidebarQBadge" style="display:none">0</span>
+    </div>
+    <a class="sidebar-item" href="https://ca.indeed.com/jobs?q=registered+practical+nurse&l=Toronto%2C+ON&fromage=3" target="_blank">
+      <span class="sidebar-icon">🏥</span> RPN Jobs
+      <span class="sidebar-badge" id="sidebarJobBadge" style="display:none;background:var(--green);color:#000">0</span>
+    </a>
+    <div class="sidebar-item" onclick="openFinance()">
+      <span class="sidebar-icon">💳</span> Finance
+    </div>
+
+    <div class="sidebar-section">Learn</div>
+    <div class="sidebar-item" onclick="document.getElementById('ytInput').focus()">
+      <span class="sidebar-icon">▶️</span> Queue a video
+    </div>
+
+    <div class="sidebar-section">Schedule</div>
+    <a class="sidebar-item" href="https://calendar.google.com" target="_blank">
+      <span class="sidebar-icon">📅</span> Calendar →
+    </a>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-item" onclick="refreshAll()">
+        <span class="sidebar-icon">↻</span> Refresh
       </div>
-      <div class="metrics-grid">
-        <div class="metric">
-          <div class="metric-label">Total balance</div>
-          <div class="metric-val" id="totalDebt">—</div>
-          <div class="metric-sub" id="nextDue">Add a debt to start</div>
+      <div class="sidebar-item" onclick="openSettings()">
+        <span class="sidebar-icon">⚙</span> Settings
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <!-- Setup banner -->
+    <div class="setup-banner" id="setupBanner">
+      ⚙ Google Client ID not set. <a onclick="openSettings()">Open Settings</a> to connect your Google account.
+    </div>
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <div>
+        <div class="topbar-greeting" id="greeting">Good morning, Anthony</div>
+        <div class="topbar-sub" id="dateSubline"></div>
+      </div>
+      <div class="topbar-actions">
+        <span class="badge badge-amber" id="pendingBadge" style="display:none"></span>
+      </div>
+    </div>
+
+    <!-- Stat pills -->
+    <div class="stat-row" id="statRow">
+      <div class="stat-pill"><span class="dot a" id="qDot"></span><span class="stat-val" id="statDecisions">0</span> decisions</div>
+      <div class="stat-pill"><span class="dot g" id="jDot"></span><span class="stat-val" id="statJobs">0</span> job matches</div>
+      <div class="stat-pill"><span class="dot b"></span><span class="stat-val" id="statDays">—</span> days to Hyrox</div>
+    </div>
+
+    <!-- Decision Queue -->
+    <div class="section">
+      <div class="card">
+        <div class="card-label">
+          📥 Decision queue
+          <div class="card-label-right">
+            <span class="badge badge-amber" id="queueBadge" style="display:none"></span>
+          </div>
         </div>
-        <div class="metric">
-          <div class="metric-label">Paid off (2026)</div>
-          <div class="metric-val" id="paidOff">—</div>
-          <div class="metric-sub" id="paidSub">—</div>
+        <div id="queueList"></div>
+      </div>
+    </div>
+
+    <!-- Jobs + Finance -->
+    <div class="grid-2 section">
+      <div class="card">
+        <div class="card-label">
+          🏥 RPN job matches
+          <div class="card-label-right">
+            <span class="badge badge-green" id="jobBadge" style="display:none"></span>
+          </div>
+        </div>
+        <div id="jobList"><div class="empty">Connecting to Gmail...</div></div>
+        <div class="conn-note"><span class="dot" id="jobDot"></span><span id="jobStatus">Filters: clinic · aesthetic · occ health · no LTC</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">
+          💳 Finance
+          <div class="card-label-right">
+            <button class="btn btn-sm" onclick="openFinance()">+ Add</button>
+          </div>
+        </div>
+        <div class="finance-metrics">
+          <div class="fin-metric">
+            <div class="fin-label">Total balance</div>
+            <div class="fin-val" id="totalDebt">—</div>
+            <div class="fin-sub" id="nextDue">Add a debt to start</div>
+          </div>
+          <div class="fin-metric">
+            <div class="fin-label">Paid off (2026)</div>
+            <div class="fin-val" id="paidOff">—</div>
+            <div class="fin-sub" id="paidSub">—</div>
+          </div>
+        </div>
+        <div id="debtList"></div>
+        <div>
+          <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+          <div class="progress-label" id="progressLabel">—</div>
         </div>
       </div>
-      <div id="debtList"></div>
-      <div style="margin-top:12px">
-        <div style="font-size:11px;color:var(--text-2);margin-bottom:4px">Payoff progress</div>
-        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-        <div style="font-size:11px;color:var(--text-3);margin-top:4px" id="progressLabel">—</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Learning + Schedule -->
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-header">
-        <span class="card-icon">▶️</span>
-        <span class="card-title">Learning queue</span>
-        <button class="btn btn-sm" onclick="clearDone()" style="margin-left:auto">Clear done</button>
-      </div>
-      <div id="ytList"></div>
-      <input type="text" class="url-input" id="ytInput" placeholder="Paste YouTube URL to queue for notes..." onkeydown="if(event.key==='Enter') addVideo()" />
-      <div style="font-size:11px;color:var(--text-3);margin-top:5px">Press Enter to add · AI notes saved to Google Drive</div>
     </div>
 
-    <div class="card">
-      <div class="card-header">
-        <span class="card-icon">📅</span>
-        <span class="card-title">This week</span>
-        <a class="card-action" href="https://calendar.google.com" target="_blank">Calendar →</a>
+    <!-- Learning + Schedule -->
+    <div class="grid-2 section">
+      <div class="card">
+        <div class="card-label">
+          ▶️ Learning queue
+          <div class="card-label-right">
+            <button class="btn btn-sm" onclick="clearDone()">Clear done</button>
+          </div>
+        </div>
+        <div id="ytList"></div>
+        <input type="text" class="url-input" id="ytInput" placeholder="Paste YouTube URL → AI summarizes → saves to Google Docs" onkeydown="if(event.key==='Enter') addVideo()" />
       </div>
-      <div class="sched-grid" id="schedGrid"></div>
-      <div style="font-size:12px;color:var(--text-2);margin-top:10px" id="openDaysNote"></div>
-      <div class="hyrox-pill">
-        <span class="hyrox-left">🏆 Hyrox relay — Toronto</span>
-        <span class="hyrox-right" id="hyroxDays">—</span>
+
+      <div class="card">
+        <div class="card-label">📅 This week</div>
+        <div class="sched-grid" id="schedGrid"></div>
+        <div class="open-note" id="openDaysNote"></div>
+        <div class="hyrox-pill">
+          <span class="hyrox-left">🏆 Hyrox relay — Toronto</span>
+          <span class="hyrox-right" id="hyroxDays">—</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Alerts -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-icon">🔔</span>
-      <span class="card-title">Alerts</span>
+    <!-- Alerts -->
+    <div class="section">
+      <div class="card">
+        <div class="card-label">🔔 Alerts</div>
+        <div id="alertsGrid"></div>
+      </div>
     </div>
-    <div class="alerts-grid" id="alertsGrid"></div>
-  </div>
 
+  </main>
 </div>
 
 <!-- SETTINGS PANEL -->
@@ -340,11 +627,11 @@
       <input type="text" id="s_name" value="Anthony" />
     </div>
     <div class="field">
-      <label>Google OAuth Client ID <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--blue);font-size:11px;margin-left:4px">Get it here →</a></label>
+      <label>Google OAuth Client ID <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--blue);font-size:11px;margin-left:4px;text-transform:none;letter-spacing:0">Get it →</a></label>
       <input type="text" id="s_clientId" placeholder="xxxxxxxxx.apps.googleusercontent.com" />
     </div>
     <div class="field">
-      <label>AI API Key — Gemini or Claude (for YouTube summaries)</label>
+      <label>Gemini API Key (YouTube summaries)</label>
       <input type="password" id="s_aiKey" placeholder="Enter API key..." />
     </div>
     <div class="field">
@@ -352,11 +639,11 @@
       <input type="date" id="s_hyrox" />
     </div>
     <div class="field">
-      <label>HVAC work days this week (check which days)</label>
+      <label>HVAC work days</label>
       <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap" id="hvacDaysCheck"></div>
     </div>
     <div class="panel-actions">
-      <button class="btn btn-blue" onclick="saveSettings()">Save</button>
+      <button class="btn btn-primary" onclick="saveSettings()">Save</button>
       <button class="btn" onclick="closeOverlay('settingsOverlay')">Cancel</button>
       <button class="btn" onclick="signOut()" style="margin-left:auto;color:var(--red)">Sign out</button>
     </div>
@@ -367,12 +654,12 @@
 <div class="overlay" id="financeOverlay" onclick="closeOverlay('financeOverlay',event)">
   <div class="panel">
     <div class="panel-title">Add debt / balance</div>
-    <div class="field"><label>Name (e.g. MBNA, Student Loan)</label><input type="text" id="f_name" placeholder="MBNA Amazon Card" /></div>
+    <div class="field"><label>Name</label><input type="text" id="f_name" placeholder="MBNA Amazon Card" /></div>
     <div class="field"><label>Current balance ($)</label><input type="number" id="f_bal" placeholder="1240" /></div>
     <div class="field"><label>Monthly payment ($)</label><input type="number" id="f_monthly" placeholder="147" /></div>
     <div class="field"><label>Next payment due</label><input type="date" id="f_due" /></div>
     <div class="panel-actions">
-      <button class="btn btn-blue" onclick="addDebt()">Add</button>
+      <button class="btn btn-primary" onclick="addDebt()">Add</button>
       <button class="btn" onclick="closeOverlay('financeOverlay')">Cancel</button>
     </div>
   </div>
@@ -387,22 +674,19 @@ const PROFILE = {
   HYROX: ls('hyrox') || '2026-10-01',
   CLIENT_ID: ls('clientId') || '',
   AI_KEY: ls('aiKey') || '',
-  HVAC_DAYS: JSON.parse(ls('hvacDays') || '[1,2,3,5]'), // 0=Sun...6=Sat
+  HVAC_DAYS: JSON.parse(ls('hvacDays') || '[1,2,3,5]'),
   SCOPES: [
     'https://www.googleapis.com/auth/gmail.readonly',
     'https://www.googleapis.com/auth/calendar.readonly',
     'https://www.googleapis.com/auth/drive',
     'https://www.googleapis.com/auth/documents',
   ].join(' '),
-  // Job filters
   GOOD: ['clinic','aesthetic','iv therapy','cosmetic','occupational','medical office','walk-in','private','admin','coordinator','wellness','bariatric','dermatol','oncol','mobile'],
   BAD: ['ltc','long-term care',' acute','icu','emergency','critical care','palliative'],
 };
 
-// State
 let S = {
-  authed: false,
-  token: null,
+  authed: false, token: null,
   queue: JSON.parse(ls('queue') || '[]'),
   debts: JSON.parse(ls('debts') || '[]'),
   videos: JSON.parse(ls('videos') || '[]'),
@@ -422,22 +706,10 @@ function ls(k, v) {
 // ================================================================
 window.addEventListener('load', () => {
   buildHvacCheckboxes();
-  updateGreeting();
-  renderHyrox();
-  renderSchedule();
-  renderQueue();
-  renderJobs();
-  renderFinance();
-  renderVideos();
-  renderAlerts();
-
+  updateGreeting(); renderHyrox(); renderSchedule();
+  renderQueue(); renderJobs(); renderFinance(); renderVideos(); renderAlerts();
   const token = ls('token');
-  if (token) {
-    S.token = token;
-    S.authed = true;
-    showDash();
-    loadGoogle();
-  }
+  if (token) { S.token = token; S.authed = true; showDash(); loadGoogle(); }
 });
 
 // ================================================================
@@ -446,22 +718,15 @@ window.addEventListener('load', () => {
 function signIn() {
   const cid = ls('clientId') || PROFILE.CLIENT_ID;
   if (!cid || cid.length < 10) {
-    showDash();
-    openSettings();
-    document.getElementById('setupBanner').style.display = 'flex';
-    return;
+    showDash(); openSettings();
+    document.getElementById('setupBanner').style.display = 'flex'; return;
   }
   const client = google.accounts.oauth2.initTokenClient({
-    client_id: cid,
-    scope: PROFILE.SCOPES,
-    prompt: 'consent',
+    client_id: cid, scope: PROFILE.SCOPES, prompt: 'consent',
     callback: (r) => {
       if (r.access_token) {
-        S.token = r.access_token;
-        S.authed = true;
-        ls('token', r.access_token);
-        showDash();
-        loadGoogle();
+        S.token = r.access_token; S.authed = true;
+        ls('token', r.access_token); showDash(); loadGoogle();
       }
     },
   });
@@ -478,7 +743,7 @@ function signOut() {
 
 function showDash() {
   document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'flex';
+  document.getElementById('dashboard').style.display = 'block';
 }
 
 // ================================================================
@@ -509,48 +774,32 @@ function loadDemo() {
     { icon:'🏥', bg:'var(--green-bg)', title:'New RPN matches', sub:'7 new jobs since yesterday' },
     { icon:'💳', bg:'var(--red-bg)', title:'Payment due in 3 days', sub:'MBNA · $147.00' },
   ];
-  showDash();
-  renderAll();
+  showDash(); renderAll();
 }
 
 // ================================================================
 // GOOGLE DATA
 // ================================================================
-async function loadGoogle() {
-  await loadGmailJobs();
-  await loadCalendar();
-}
-
-async function refreshAll() {
-  if (S.authed) await loadGoogle();
-  renderAll();
-}
-
+async function loadGoogle() { await loadGmailJobs(); await loadCalendar(); }
+async function refreshAll() { if (S.authed) await loadGoogle(); renderAll(); }
 async function gFetch(url) {
   if (!S.token) return null;
   const r = await fetch(url, { headers: { Authorization: `Bearer ${S.token}` } });
-  if (!r.ok) return null;
-  return r.json();
+  if (!r.ok) return null; return r.json();
 }
 
 async function loadGmailJobs() {
-  const data = await gFetch(
-    'https://gmail.googleapis.com/gmail/v1/users/me/messages?q=from:indeed.com+subject:registered+practical+nurse&maxResults=15'
-  );
+  const data = await gFetch('https://gmail.googleapis.com/gmail/v1/users/me/messages?q=from:indeed.com+subject:registered+practical+nurse&maxResults=15');
   if (!data || !data.messages) return;
-
   const jobs = [];
   for (const m of data.messages.slice(0, 6)) {
     const d = await gFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${m.id}?format=metadata&metadataHeaders=Subject&metadataHeaders=subject`);
     if (!d) continue;
     const subj = d.payload?.headers?.find(h => h.name.toLowerCase() === 'subject')?.value || '';
-    const job = parseJob(subj);
-    if (job) jobs.push(job);
+    const job = parseJob(subj); if (job) jobs.push(job);
   }
-
   if (jobs.length) {
-    S.jobs = jobs;
-    ls('jobs', JSON.stringify(jobs));
+    S.jobs = jobs; ls('jobs', JSON.stringify(jobs));
     document.getElementById('jobDot').className = 'dot dot-green';
     document.getElementById('jobStatus').textContent = `${jobs.length} matches · Filters active · Updated now`;
     renderJobs();
@@ -562,20 +811,14 @@ function parseJob(subject) {
   for (const b of PROFILE.BAD) { if (low.includes(b)) return null; }
   let type = 'general';
   for (const g of PROFILE.GOOD) { if (low.includes(g)) { type = g; break; } }
-  // Clean up employer name from Indeed subject patterns
   let title = subject.replace(/ is hiring for /i, ' — ').replace(/\s*\+\s*\d+.*$/,'').trim().substring(0, 72);
   return { title, type, rate: 'See posting', mode: 'GTA' };
 }
 
 async function loadCalendar() {
-  const now = new Date();
-  const end = new Date(); end.setDate(now.getDate() + 7);
-  const data = await gFetch(
-    `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${now.toISOString()}&timeMax=${end.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=30`
-  );
-  if (!data) return;
-  S.calEvents = data.items || [];
-  renderSchedule();
+  const now = new Date(); const end = new Date(); end.setDate(now.getDate() + 7);
+  const data = await gFetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${now.toISOString()}&timeMax=${end.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=30`);
+  if (!data) return; S.calEvents = data.items || []; renderSchedule();
 }
 
 // ================================================================
@@ -594,27 +837,31 @@ function updateGreeting() {
   const DN = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const MN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const pending = S.queue.length;
-  document.getElementById('dateSubline').textContent =
-    `${DN[d.getDay()]}, ${MN[d.getMonth()]} ${d.getDate()} · ${pending > 0 ? `${pending} item${pending!==1?'s':''} need your decision` : 'All caught up'}`;
+  document.getElementById('dateSubline').textContent = `${DN[d.getDay()]}, ${MN[d.getMonth()]} ${d.getDate()} · ${pending > 0 ? `${pending} item${pending!==1?'s':''} need your decision` : 'All caught up'}`;
   const pb = document.getElementById('pendingBadge');
   pb.style.display = pending > 0 ? 'inline-flex' : 'none';
   pb.textContent = `${pending} pending`;
+  // Update sidebar + stat row
+  const qb = document.getElementById('sidebarQBadge');
+  if (qb) { qb.style.display = pending > 0 ? 'inline' : 'none'; qb.textContent = pending; }
+  const sd = document.getElementById('statDecisions');
+  if (sd) sd.textContent = pending;
 }
 
 function renderQueue() {
   const el = document.getElementById('queueList');
   const badge = document.getElementById('queueBadge');
   if (!S.queue.length) {
-    el.innerHTML = '<div class="empty">All clear — nothing needs your attention right now.</div>';
-    badge.style.display = 'none';
-    return;
+    el.innerHTML = '<div class="queue-empty">All clear — nothing needs your attention.</div>';
+    badge.style.display = 'none'; return;
   }
   badge.textContent = `${S.queue.length} item${S.queue.length!==1?'s':''}`;
   badge.style.display = 'inline-flex';
   const ICONS = { job:'🏥', amazon:'📦', finance:'💳', alert:'🔔' };
   el.innerHTML = S.queue.map((item, i) => `
     <div class="q-item${item._confirmed?' confirmed':''}" id="qitem-${i}">
-      <div class="q-icon">${item._confirmed ? '✅' : (ICONS[item.type]||'📌')}</div>
+      <div class="q-stripe q-stripe-${item.type||'alert'}"></div>
+      <div class="q-icon q-icon-${item.type||'alert'}">${item._confirmed ? '✅' : (ICONS[item.type]||'📌')}</div>
       <div class="q-body">
         <div class="q-title">${item.title}</div>
         <div class="q-sub">${item.sub}${item.badge?` <span class="badge badge-green" style="margin-left:5px">${item.badge}</span>`:''}</div>
@@ -638,37 +885,45 @@ function dismissQ(i) {
 }
 function actQ(i) {
   const item = S.queue[i];
-  // Open link without dismissing
   if (item.type === 'amazon' && item.url) window.open(item.url, '_blank');
   else if (item.type === 'amazon') window.open('https://amazon.ca', '_blank');
   else if (item.type === 'job' && item.url) window.open(item.url, '_blank');
   else if (item.type === 'job') window.open('https://ca.indeed.com/jobs?q=registered+practical+nurse&l=Toronto', '_blank');
-  // Mark confirmed, show checkmark, then remove after 2.5s
-  S.queue[i]._confirmed = true;
-  renderQueue();
+  S.queue[i]._confirmed = true; renderQueue();
   setTimeout(() => dismissQ(i), 2500);
 }
 
 function renderJobs() {
   const el = document.getElementById('jobList');
   const badge = document.getElementById('jobBadge');
+  const sb = document.getElementById('sidebarJobBadge');
+  const sj = document.getElementById('statJobs');
   if (!S.jobs.length) {
     el.innerHTML = '<div class="empty">No matching jobs yet. Connects to Gmail when signed in.</div>';
-    badge.style.display = 'none'; return;
+    badge.style.display = 'none';
+    if (sb) sb.style.display = 'none';
+    if (sj) sj.textContent = '0';
+    return;
   }
-  badge.textContent = `${S.jobs.length} new`;
-  badge.style.display = 'inline-flex';
-  el.innerHTML = S.jobs.slice(0,4).map(j => `
+  badge.textContent = `${S.jobs.length} new`; badge.style.display = 'inline-flex';
+  if (sb) { sb.style.display = 'inline'; sb.textContent = S.jobs.length; }
+  if (sj) sj.textContent = S.jobs.length;
+  el.innerHTML = S.jobs.slice(0,4).map(j => {
+    const initials = j.title.split(/[\s—–-]+/).filter(w=>w.length>2).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+    return `
     <div class="job-item">
-      <div class="job-title">${j.title}</div>
-      <div class="job-meta">
-        <span class="badge badge-green">${j.type}</span>
-        <span>${j.rate}</span>
-        <span style="color:var(--text-3)">${j.mode}</span>
-        <a href="https://ca.indeed.com/jobs?q=${encodeURIComponent(j.title.substring(0,30))}&l=Toronto" target="_blank" style="color:var(--blue);text-decoration:none;margin-left:auto;font-size:11px">View →</a>
+      <div class="job-initials">${initials||'RN'}</div>
+      <div class="job-body">
+        <div class="job-title">${j.title}</div>
+        <div class="job-meta">
+          <span class="badge badge-green">${j.type}</span>
+          <span style="color:var(--text-2);font-size:11px">${j.rate}</span>
+          <span style="color:var(--text-3);font-size:11px">${j.mode}</span>
+          <a href="https://ca.indeed.com/jobs?q=${encodeURIComponent(j.title.substring(0,30))}&l=Toronto" target="_blank" style="color:var(--blue);text-decoration:none;margin-left:auto;font-size:11px;white-space:nowrap">View →</a>
+        </div>
       </div>
-    </div>
-  `).join('') + (S.jobs.length>4 ? `<div style="font-size:12px;color:var(--text-3);margin-top:8px">${S.jobs.length-4} more filtered</div>` : '');
+    </div>`;
+  }).join('') + (S.jobs.length>4 ? `<div style="font-size:11px;color:var(--text-3);margin-top:8px">${S.jobs.length-4} more filtered</div>` : '');
 }
 
 function renderFinance() {
@@ -678,10 +933,9 @@ function renderFinance() {
     document.getElementById('nextDue').textContent = 'Add a debt to start';
     document.getElementById('paidOff').textContent = '—';
     document.getElementById('paidSub').textContent = '—';
-    document.getElementById('debtList').innerHTML = '<div class="empty" style="padding:8px 0">No debts tracked. Click + Add to start.</div>';
+    document.getElementById('debtList').innerHTML = '<div class="empty">No debts tracked. Click + Add to start.</div>';
     document.getElementById('progressFill').style.width = '0%';
-    document.getElementById('progressLabel').textContent = '—';
-    return;
+    document.getElementById('progressLabel').textContent = '—'; return;
   }
   const total = debts.reduce((s,d) => s + Number(d.balance), 0);
   const orig = total + S.paidOff;
@@ -689,31 +943,24 @@ function renderFinance() {
   document.getElementById('totalDebt').textContent = `$${total.toLocaleString()}`;
   document.getElementById('paidOff').textContent = `$${S.paidOff.toLocaleString()}`;
   document.getElementById('paidSub').textContent = S.paidOff > 0 ? '↓ paid down this year' : 'Log payments to track';
-
   const upcoming = [...debts].filter(d=>d.due).sort((a,b)=>new Date(a.due)-new Date(b.due))[0];
   if (upcoming) {
     const days = Math.ceil((new Date(upcoming.due) - new Date()) / 86400000);
     document.getElementById('nextDue').textContent = days <= 0 ? '⚠ Payment overdue' : days <= 3 ? `Due in ${days} day${days!==1?'s':''}` : `Next: ${upcoming.due}`;
     if (days >= 0 && days <= 3 && !S.queue.find(q=>q.id==='pay-due')) {
       S.queue.push({ id:'pay-due', type:'finance', title:`${upcoming.name} payment due in ${days} day${days!==1?'s':''}`, sub:`$${upcoming.monthly||upcoming.balance} · Plan your payment`, urgent:true });
-      ls('queue', JSON.stringify(S.queue));
-      renderQueue();
+      ls('queue', JSON.stringify(S.queue)); renderQueue();
     }
   }
-
   document.getElementById('debtList').innerHTML = debts.map((d,i) => `
     <div class="debt-row">
-      <div>
-        <div class="debt-name-col">${d.name}</div>
-        <div class="debt-due-col">Due: ${d.due||'—'} · $${d.monthly||'—'}/mo</div>
-      </div>
-      <div class="debt-right">
+      <div><div class="debt-name">${d.name}</div><div class="debt-due">Due: ${d.due||'—'} · $${d.monthly||'—'}/mo</div></div>
+      <div style="display:flex;align-items:center;gap:8px">
         <span class="debt-amt">$${Number(d.balance).toLocaleString()}</span>
         <button class="btn btn-sm" onclick="removeDebt(${i})" style="color:var(--red)">×</button>
       </div>
     </div>
   `).join('');
-
   document.getElementById('progressFill').style.width = `${pct}%`;
   const monthly = debts.reduce((s,d)=>s+Number(d.monthly||0),0);
   const months = monthly > 0 ? Math.ceil(total/monthly) : null;
@@ -728,22 +975,19 @@ function renderVideos() {
   const TAGS = { HVAC:'badge-blue', handyman:'badge-blue', business:'badge-amber', news:'badge-gray', fitness:'badge-green', other:'badge-gray' };
   el.innerHTML = S.videos.map((v,i) => `
     <div class="yt-item">
-      <div class="yt-thumb">${v.status==='done'?'✓':v.status==='summarizing'?'⏳':'▶'}</div>
+      <div class="yt-thumb ${v.status==='done'?'done':v.status==='summarizing'?'summ':''}">${v.status==='done'?'✓':v.status==='summarizing'?'⏳':'▶'}</div>
       <div class="yt-body">
         <div class="yt-title"><a href="${v.url}" target="_blank" style="color:inherit;text-decoration:none">${v.title||v.url}</a></div>
         <div class="yt-meta">
           <span class="badge ${TAGS[v.tag]||'badge-gray'}">${v.tag||'other'}</span>
           ${v.status==='done' && v.docId
-            ? `<a href="https://docs.google.com/document/d/${v.docId}" target="_blank" style="color:var(--green);font-size:11px">✓ Notes in ${v.docName||'Google Docs'}</a>`
-            : v.status==='summarizing'
-            ? '<span style="color:var(--amber)">⏳ Summarizing...</span>'
-            : v.status==='done'
-            ? '<span style="color:var(--green)">✓ Done</span>'
-            : '<span>Queued</span>'
-          }
+            ? `<a href="https://docs.google.com/document/d/${v.docId}" target="_blank" style="color:var(--green)">✓ Notes saved →</a>`
+            : v.status==='summarizing' ? '<span style="color:var(--amber)">Summarizing...</span>'
+            : v.status==='done' ? '<span style="color:var(--green)">✓ Done</span>'
+            : '<span>Queued</span>'}
         </div>
       </div>
-      <button class="btn btn-sm" onclick="removeVideo(${i})">×</button>
+      <button class="btn btn-sm" onclick="removeVideo(${i})" style="flex-shrink:0">×</button>
     </div>
   `).join('');
 }
@@ -756,116 +1000,42 @@ async function addVideo() {
   }
   const vidId = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)?.[1];
   const v = { url, videoId:vidId, title:'Fetching title...', tag:'other', status:'queued', added:new Date().toISOString() };
-  S.videos.push(v);
-  ls('videos', JSON.stringify(S.videos));
-  input.value = '';
-  renderVideos();
+  S.videos.push(v); ls('videos', JSON.stringify(S.videos)); input.value = ''; renderVideos();
   if (vidId) {
     try {
       const d = await fetch(`https://www.youtube.com/oembed?url=https://youtube.com/watch?v=${vidId}&format=json`).then(r=>r.json());
       const found = S.videos.find(x=>x.videoId===vidId);
       if (found) {
-        found.title = d.title;
-        found.tag = detectTag(url, d.title);
-        ls('videos', JSON.stringify(S.videos));
-        renderVideos();
-        // Trigger AI summarization if key + token available
-        if (PROFILE.AI_KEY && S.token) {
-          found.status = 'summarizing';
-          renderVideos();
-          await summarizeAndSave(found);
-          renderVideos();
-        }
+        found.title = d.title; found.tag = detectTag(url, d.title);
+        ls('videos', JSON.stringify(S.videos)); renderVideos();
+        if (PROFILE.AI_KEY && S.token) { found.status = 'summarizing'; renderVideos(); await summarizeAndSave(found); renderVideos(); }
       }
     } catch(e) {}
   }
 }
 
-// ---- AI SUMMARIZATION PIPELINE ----
 async function summarizeAndSave(video) {
   try {
-    const TAG_DOCS = {
-      HVAC: 'Anthony — HVAC Notes',
-      handyman: 'Anthony — HVAC Notes',
-      business: 'Anthony — Business Notes',
-      fitness: 'Anthony — Fitness Notes',
-      news: 'Anthony — News Notes',
-      other: 'Anthony — General Notes',
-    };
+    const TAG_DOCS = { HVAC:'Anthony — HVAC Notes', handyman:'Anthony — HVAC Notes', business:'Anthony — Business Notes', fitness:'Anthony — Fitness Notes', news:'Anthony — News Notes', other:'Anthony — General Notes' };
     const docName = TAG_DOCS[video.tag] || TAG_DOCS.other;
-
-    // 1. Generate notes with Gemini
-    const prompt = `You are helping Anthony, an HVAC technician and RPN, build a personal knowledge base from YouTube videos.
-
-Video title: "${video.title}"
-Category: ${video.tag}
-
-Generate concise study notes in this format:
-**${video.title}**
-Date: ${new Date().toLocaleDateString('en-CA')}
-
-Key Concepts:
-- [3-5 bullet points of the most important ideas]
-
-Actionable Takeaways:
-- [2-3 things Anthony can apply immediately]
-
-Follow-up:
-- [1-2 things worth exploring further]
-
----
-
-Keep it tight. No fluff. Practical over theoretical.`;
-
-    const gemRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${PROFILE.AI_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-    });
+    const prompt = `You are helping Anthony, an HVAC technician and RPN, build a personal knowledge base from YouTube videos.\n\nVideo title: "${video.title}"\nCategory: ${video.tag}\n\nGenerate concise study notes:\n**${video.title}**\nDate: ${new Date().toLocaleDateString('en-CA')}\n\nKey Concepts:\n- [3-5 bullet points]\n\nActionable Takeaways:\n- [2-3 things to apply immediately]\n\nFollow-up:\n- [1-2 things to explore]\n\n---\n\nKeep it tight. Practical over theoretical.`;
+    const gemRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${PROFILE.AI_KEY}`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({contents:[{parts:[{text:prompt}]}]}) });
     const gemData = await gemRes.json();
     const notes = gemData.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!notes) throw new Error('No Gemini response');
-
-    // 2. Find or create Google Doc
-    const searchRes = await fetch(
-      `https://www.googleapis.com/drive/v3/files?q=name%3D'${encodeURIComponent(docName)}'+and+mimeType%3D'application%2Fvnd.google-apps.document'+and+trashed%3Dfalse&fields=files(id,name)&spaces=drive`,
-      { headers: { Authorization: `Bearer ${S.token}` } }
-    );
+    const searchRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=name%3D'${encodeURIComponent(docName)}'+and+mimeType%3D'application%2Fvnd.google-apps.document'+and+trashed%3Dfalse&fields=files(id,name)&spaces=drive`, { headers:{Authorization:`Bearer ${S.token}`} });
     const searchData = await searchRes.json();
     let docId;
-    if (searchData.files && searchData.files.length > 0) {
-      docId = searchData.files[0].id;
-    } else {
-      const createRes = await fetch('https://www.googleapis.com/drive/v3/files', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${S.token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: docName, mimeType: 'application/vnd.google-apps.document' })
-      });
-      const createData = await createRes.json();
-      docId = createData.id;
+    if (searchData.files && searchData.files.length > 0) { docId = searchData.files[0].id; }
+    else {
+      const cr = await fetch('https://www.googleapis.com/drive/v3/files', { method:'POST', headers:{Authorization:`Bearer ${S.token}`,'Content-Type':'application/json'}, body:JSON.stringify({name:docName,mimeType:'application/vnd.google-apps.document'}) });
+      docId = (await cr.json()).id;
     }
-
-    // 3. Get doc end index and append notes
-    const docRes = await fetch(`https://docs.googleapis.com/v1/documents/${docId}`, {
-      headers: { Authorization: `Bearer ${S.token}` }
-    });
-    const doc = await docRes.json();
+    const doc = await (await fetch(`https://docs.googleapis.com/v1/documents/${docId}`, {headers:{Authorization:`Bearer ${S.token}`}})).json();
     const endIndex = doc.body.content.slice(-1)[0].endIndex - 1;
-    await fetch(`https://docs.googleapis.com/v1/documents/${docId}:batchUpdate`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${S.token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ requests: [{ insertText: { location: { index: endIndex }, text: '\n\n' + notes } }] })
-    });
-
-    video.status = 'done';
-    video.docId = docId;
-    video.docName = docName;
-    ls('videos', JSON.stringify(S.videos));
-  } catch(e) {
-    video.status = 'queued';
-    video.aiError = e.message;
-    ls('videos', JSON.stringify(S.videos));
-  }
+    await fetch(`https://docs.googleapis.com/v1/documents/${docId}:batchUpdate`, { method:'POST', headers:{Authorization:`Bearer ${S.token}`,'Content-Type':'application/json'}, body:JSON.stringify({requests:[{insertText:{location:{index:endIndex},text:'\n\n'+notes}}]}) });
+    video.status = 'done'; video.docId = docId; video.docName = docName; ls('videos', JSON.stringify(S.videos));
+  } catch(e) { video.status = 'queued'; video.aiError = e.message; ls('videos', JSON.stringify(S.videos)); }
 }
 
 function detectTag(url, title='') {
@@ -883,18 +1053,14 @@ function clearDone() { S.videos = S.videos.filter(v=>v.status!=='done'); ls('vid
 
 function renderSchedule() {
   const el = document.getElementById('schedGrid');
-  const today = new Date();
-  const dow = today.getDay();
+  const today = new Date(); const dow = today.getDay();
   const sun = new Date(today); sun.setDate(today.getDate() - dow);
   const NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   let openCount = 0;
   el.innerHTML = NAMES.map((name, i) => {
     const d = new Date(sun); d.setDate(sun.getDate() + i);
     const isToday = d.toDateString() === today.toDateString();
-    const calEv = S.calEvents.find(ev => {
-      const evD = new Date(ev.start?.dateTime || ev.start?.date);
-      return evD.toDateString() === d.toDateString();
-    });
+    const calEv = S.calEvents.find(ev => { const evD = new Date(ev.start?.dateTime || ev.start?.date); return evD.toDateString() === d.toDateString(); });
     const hasHvac = calEv?.summary?.toLowerCase().includes('hvac') || calEv?.summary?.toLowerCase().includes('work') || PROFILE.HVAC_DAYS.includes(i);
     const hasTrain = calEv?.summary?.toLowerCase().includes('hyrox') || calEv?.summary?.toLowerCase().includes('train');
     let cls = 's-off', label = 'Open';
@@ -903,21 +1069,23 @@ function renderSchedule() {
     if (!hasHvac && !hasTrain && d >= today) openCount++;
     return `<div class="sched-day ${cls}${isToday?' s-today':''}"><div class="sched-day-name">${name}</div><div class="sched-day-val">${label}</div></div>`;
   }).join('');
-  document.getElementById('openDaysNote').textContent = `${openCount} open day${openCount!==1?'s':''} remaining this week · Available for shifts or gigs`;
+  document.getElementById('openDaysNote').textContent = `${openCount} open day${openCount!==1?'s':''} remaining · Available for shifts or gigs`;
 }
 
 function renderHyrox() {
   const target = new Date(PROFILE.HYROX);
   const days = Math.ceil((target - new Date()) / 86400000);
   document.getElementById('hyroxDays').textContent = days > 0 ? `${days} days to go` : days === 0 ? 'Race day! 🏁' : 'Completed ✓';
+  const sd = document.getElementById('statDays');
+  if (sd) sd.textContent = days > 0 ? days : '—';
 }
 
 function renderAlerts() {
   const el = document.getElementById('alertsGrid');
-  if (!S.alerts.length) { el.innerHTML = '<div class="empty" style="grid-column:1/-1">No alerts right now.</div>'; return; }
+  if (!S.alerts.length) { el.innerHTML = '<div class="empty">No alerts right now.</div>'; return; }
   el.innerHTML = S.alerts.map(a => `
     <div class="alert-item">
-      <div class="alert-icon" style="background:${a.bg||'var(--bg-2)'}"><span>${a.icon||'🔔'}</span></div>
+      <div class="alert-icon" style="background:${a.bg||'var(--bg-4)'}"><span>${a.icon||'🔔'}</span></div>
       <div><div class="alert-title">${a.title}</div><div class="alert-sub">${a.sub}</div></div>
     </div>
   `).join('');
@@ -930,8 +1098,8 @@ function buildHvacCheckboxes() {
   const names = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const stored = JSON.parse(ls('hvacDays')||'[1,2,3,5]');
   document.getElementById('hvacDaysCheck').innerHTML = names.map((n,i) => `
-    <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer">
-      <input type="checkbox" id="hd_${i}" ${stored.includes(i)?'checked':''} style="accent-color:var(--blue)"/> ${n}
+    <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer;color:var(--text-2)">
+      <input type="checkbox" id="hd_${i}" ${stored.includes(i)?'checked':''} style="accent-color:var(--indigo)"/> ${n}
     </label>
   `).join('');
 }
@@ -946,18 +1114,17 @@ function openSettings() {
 
 function saveSettings() {
   const name = document.getElementById('s_name').value.trim();
-  const cid = document.getElementById('s_clientId').value.trim();
-  const key = document.getElementById('s_aiKey').value.trim();
+  const cid  = document.getElementById('s_clientId').value.trim();
+  const key  = document.getElementById('s_aiKey').value.trim();
   const hyrox = document.getElementById('s_hyrox').value;
   const hvac = [...Array(7)].map((_,i) => document.getElementById(`hd_${i}`)?.checked ? i : null).filter(x=>x!==null);
-  if (name) { ls('userName', name); PROFILE.NAME = name; }
-  if (cid) { ls('clientId', cid); PROFILE.CLIENT_ID = cid; document.getElementById('setupBanner').style.display='none'; }
-  if (key) { ls('aiKey', key); PROFILE.AI_KEY = key; }
-  if (hyrox) { ls('hyrox', hyrox); PROFILE.HYROX = hyrox; }
+  if (name)  { ls('userName', name);  PROFILE.NAME = name; }
+  if (cid)   { ls('clientId', cid);   PROFILE.CLIENT_ID = cid; document.getElementById('setupBanner').style.display='none'; }
+  if (key)   { ls('aiKey', key);      PROFILE.AI_KEY = key; }
+  if (hyrox) { ls('hyrox', hyrox);    PROFILE.HYROX = hyrox; }
   ls('hvacDays', JSON.stringify(hvac));
   PROFILE.HVAC_DAYS.length = 0; hvac.forEach(d => PROFILE.HVAC_DAYS.push(d));
-  closeOverlay('settingsOverlay');
-  renderAll();
+  closeOverlay('settingsOverlay'); renderAll();
 }
 
 // ================================================================
@@ -967,9 +1134,9 @@ function openFinance() { document.getElementById('financeOverlay').classList.add
 
 function addDebt() {
   const name = document.getElementById('f_name').value.trim();
-  const bal = parseFloat(document.getElementById('f_bal').value);
+  const bal  = parseFloat(document.getElementById('f_bal').value);
   const monthly = parseFloat(document.getElementById('f_monthly').value);
-  const due = document.getElementById('f_due').value;
+  const due  = document.getElementById('f_due').value;
   if (!name || isNaN(bal)) return;
   S.debts.push({ name, balance: bal, monthly: isNaN(monthly)?0:monthly, due });
   ls('debts', JSON.stringify(S.debts));
@@ -982,12 +1149,9 @@ function addDebt() {
 // OVERLAY UTIL
 // ================================================================
 function closeOverlay(id, e) {
-  if (!e || e.target === document.getElementById(id)) {
-    document.getElementById(id).classList.remove('open');
-  }
+  if (!e || e.target === document.getElementById(id)) document.getElementById(id).classList.remove('open');
 }
 </script>
-
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 </html>
